@@ -1,23 +1,6 @@
 import React, { Component } from 'react';
+import GitHubProfile from './GitHubProfile';
 import SearchHistory from './SearchHistory';
-
-class GitHubProfile extends Component {
-  render() {
-    const avatar = this.props.profile.avatar_url;
-    const avatarStyle = {
-      height: '100px',
-      width: '100px',
-      borderRadius: '4px'
-    }
-    return (
-      <div>
-        <h1>GitHub Profile</h1>
-        <p>{this.props.profile.login} </p>
-        <img style={avatarStyle} src={avatar}/>
-      </div>
-    );
-  }
-}
 
 class GitHubSearch extends Component {
   constructor(props) {
@@ -32,17 +15,6 @@ class GitHubSearch extends Component {
     this.sort = this.sort.bind(this);
   }
 
-  sort() {
-    this.state.history.sort( (a, b) => {
-      if (a > b) return 1;
-      if (a < b) return -1;
-      return 0;
-    })
-    this.setState({
-      history: history
-    })
-  }
-
   handleSubmit(evt) {
     evt.preventDefault();
     const username = this.state.query;
@@ -52,9 +24,16 @@ class GitHubSearch extends Component {
     })
   }
 
+  handleChange(evt) {
+    console.log(evt.target.value);
+    this.setState({
+      query: evt.target.value
+    })
+  }
+
   searchGithub(username) {
     // construct URL for github
-    const access_token = '0eb42a3740ffa12dfc17bd3662a079f109d4bfdf';
+    const access_token = '8230e944e56cedc25f4c8145b48f8df51489f711';
     const url = `https://api.github.com/users/${username}?access_token=${access_token}`;
     // do a fetch request
     // parse the json response
@@ -66,10 +45,14 @@ class GitHubSearch extends Component {
     })
   }
 
-  handleChange(evt) {
-    console.log(evt.target.value);
+  sort() {
+    this.state.history.sort( (a, b) => {
+      if (a > b) return 1;
+      if (a < b) return -1;
+      return 0;
+    })
     this.setState({
-      query: evt.target.value
+      history: history
     })
   }
 
@@ -89,8 +72,8 @@ class GitHubSearch extends Component {
         </form>
         {result}
         <SearchHistory
-          sort={this.sort}
           history={this.state.history}
+          sort={this.sort}
         />
       </div>
     );

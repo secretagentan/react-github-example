@@ -6,7 +6,9 @@ const SearchHistory = ({history, sort}) => {
     width: '100%',
     textAlign: 'center'
   }
+
   const results = history.map((name, i) => <p style={pStyle} key={i}>{name}</p>);
+
   if (history.length === 0 ) {
     return (
     <div>
