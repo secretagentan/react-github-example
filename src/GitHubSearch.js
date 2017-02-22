@@ -1,6 +1,38 @@
 console.log('')
 import React, { Component } from 'react';
 
+class SearchHistory extends Component {
+  render() {
+    // const usernames = [];
+    // usernames.push(this.props.profile.login);
+    // console.log(usernames);
+    const results = history.map( (name, i) => <li key={i}>{name}</li> );
+    return (
+      <div>
+        <h1>Search History</h1>
+        <ul>
+          {results}
+        </ul>
+      </div>
+    )
+  }
+  // render() {
+  //   const SearchHistory = ({history}) => {
+  //     const results = history.map( (name, i) => <li key={i}>{name}</li>;
+  //   }
+  //     return (
+  //       <div>
+  //         <h1>Search History</h1>
+  //         <ul>
+  //           {results}
+  //         </ul>
+  //       </div>
+  //     )
+  //   // }
+  // }
+}
+
+
 class GitHubProfile extends Component {
   render() {
     const avatar = this.props.profile.avatar_url;
@@ -23,7 +55,9 @@ class GitHubSearch extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      query: ''
+      query: '',
+      profile: null,
+      history: []
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,11 +67,14 @@ class GitHubSearch extends Component {
     evt.preventDefault();
     const username = this.state.query;
     this.searchGithub(username);
+    this.setState({
+      history: this.state.history.concat(username)
+    })
   }
 
   searchGithub(username) {
     // construct URL for github
-    const access_token = '1ae2a3617cc07bc9ae81cc3f1c5d59a576cbb19b';
+    const access_token = '5eb66dbee37ff2f75dba1c3bdea22a96783e109b';
     const url = `https://api.github.com/users/${username}?access_token=${access_token}`;
     // do a fetch request
     // parse the json response
@@ -60,6 +97,9 @@ class GitHubSearch extends Component {
     const result = this.state.profile ?
       <GitHubProfile profile={this.state.profile} /> :
       <p>No Results</p>;
+    const history = this.state.profile ?
+      <SearchHistory profile={this.state.profile} /> :
+      <p>No Search History</p>;
     return (
       <div>
         <h1>GitHub Search </h1>
@@ -68,6 +108,7 @@ class GitHubSearch extends Component {
           <button>Search</button>
         </form>
         {result}
+        {history}
       </div>
     );
   }
