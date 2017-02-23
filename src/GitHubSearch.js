@@ -45,14 +45,13 @@ class GitHubSearch extends Component {
   }
 
   sort() {
-    this.state.searchHistory.sort( (a, b) => {
+    const sortedHistory = this.state.searchHistory.sort( (a, b) => {
       if (a > b) return 1;
       if (a < b) return -1;
       return 0;
     })
     this.setState({
-    // searchHistory: searchHistory
-    // WHY DOES IT NOT WORK WITH THIS???
+      searchHistory: sortedHistory
     })
   }
 
