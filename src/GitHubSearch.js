@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import GitHubProfile from './GitHubProfile';
-import SearchHistory from './SearchHistory';
+import GitHubHistory from './GitHubHistory';
 
 class GitHubSearch extends Component {
   constructor(props) {
@@ -8,7 +8,7 @@ class GitHubSearch extends Component {
     this.state = {
       query: '',
       profile: null,
-      history: []
+      searchHistory: []
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,12 +20,11 @@ class GitHubSearch extends Component {
     const username = this.state.query;
     this.searchGithub(username);
     this.setState({
-      history: this.state.history.concat(username)
+      searchHistory: this.state.searchHistory.concat(username)
     })
   }
 
   handleChange(evt) {
-    console.log(evt.target.value);
     this.setState({
       query: evt.target.value
     })
@@ -33,7 +32,7 @@ class GitHubSearch extends Component {
 
   searchGithub(username) {
     // construct URL for github
-    const access_token = '8230e944e56cedc25f4c8145b48f8df51489f711';
+    const access_token = '228207330963ddb199de39e5784d9089c7973c16';
     const url = `https://api.github.com/users/${username}?access_token=${access_token}`;
     // do a fetch request
     // parse the json response
@@ -46,13 +45,14 @@ class GitHubSearch extends Component {
   }
 
   sort() {
-    this.state.history.sort( (a, b) => {
+    this.state.searchHistory.sort( (a, b) => {
       if (a > b) return 1;
       if (a < b) return -1;
       return 0;
     })
     this.setState({
-      history: history
+    // searchHistory: searchHistory
+    // WHY DOES IT NOT WORK WITH THIS???
     })
   }
 
@@ -60,9 +60,6 @@ class GitHubSearch extends Component {
     const result = this.state.profile
       ? <GitHubProfile profile={this.state.profile} />
       : <p>No Results</p>;
-    const history = this.state.history
-      ? <SearchHistory history={this.state.history} />
-      : <p>No Search History</p>;
     return (
       <div>
         <h1>GitHub Search </h1>
@@ -71,9 +68,9 @@ class GitHubSearch extends Component {
           <button>Search</button>
         </form>
         {result}
-        <SearchHistory
-          history={this.state.history}
+        <GitHubHistory
           sort={this.sort}
+          searchHistory={this.state.searchHistory}
         />
       </div>
     );
